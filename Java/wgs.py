@@ -43,6 +43,12 @@ print(result[0].decode('utf-8'))
 print("Tagging the duplicate reads")
 bamfile="sorted.bam"
 from subprocess import PIPE, Popen
-process = Popen(['java', '-jar', 'picard.jar', 'MarkDuplicates', 'CREATE_INDEX=true', 'INPUT=',bamfile, 'OUTPUT='], stdout=PIPE, stderr=PIPE)
+process = Popen(['java', '-jar', 'picard.jar', 'MarkDuplicates', 'CREATE_INDEX=true', 'INPUT=',bamfile, 'OUTPUT=marked.bam', 'METRICS_FILE=dup_metrics.txt'], stdout=PIPE, stderr=PIPE)
 result = process.communicate()
 print(result[0].decode('utf-8'))
+
+#Running Samtools mpileup
+print("Generating pileup using samtools")
+bamfile="marked.bam"
+pileup="samtools  mpileup -B -f" + " " + gendir + " " + bamfile + " " + ">" + "mydata.pileup"
+os.system(pileup)
