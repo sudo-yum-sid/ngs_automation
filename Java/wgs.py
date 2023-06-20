@@ -11,7 +11,7 @@ Read2=input("Enter the Read2 FASTQ file\n")
 #Input for BWA
 #print("Taking input for BWA-MEM")
 #gendir=input("Enter the Reference Genome Directory\n")
-gendir="/mnt/d/Agilent\ CommonStorages/SureCall/GenomeReferences/hg38/hg38/hg38.fasta"
+gendir="/mnt/d/GenomeReferences/hg38/hg38/hg38.fasta"
 parameters=input("Enter BWA-MEM parameters from the help guide (no need to mention output file name)\n")
 
 #Running FASTQC Sofware
@@ -52,3 +52,5 @@ print("Generating pileup using samtools")
 bamfile="marked.bam"
 pileup="samtools  mpileup -B -f" + " " + gendir + " " + bamfile + " " + ">" + "mydata.pileup"
 os.system(pileup)
+
+#Running Varscan from the pileup
