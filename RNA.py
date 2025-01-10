@@ -60,9 +60,19 @@ if not os.path.exists(directory_path):
     subprocess.run(featurecounts_command, check=True)
     print(f"Alignment complete. Count file saved to {output_file}")
 
+    #removing the first line from the counts file
+    def delete_first_line(filename):
+        with open(filename, 'r') as file:
+            lines = file.readlines()
+
+        with open(filename, 'w') as file:
+            file.writelines(lines[1:])  # Write the file back, excluding the first line
+
+    delete_first_line('output/featurecounts.txt')
+
     #extracting geneid and counts columns from the featurecounts output
     import pandas as pd
-    file_path = "featurecounts.txt"
+    file_path = "output/featurecounts.txt"
     df = pd.read_csv(file_path, sep='\t', comment='!', header=0)
 
     #extracting the geneid and counts columns   
@@ -71,7 +81,7 @@ if not os.path.exists(directory_path):
     results = df[[gene_column, count_column]]
 
     #saving the extracted columns to a new csv file
-    results.to_csv('gene_counts.csv', index=False)
+    results.to_csv('output/gene_counts.csv', index=False)
 
 else:
     print(f"Directory '{directory_path}' already exists.")
