@@ -1,0 +1,17 @@
+x <- read.delim("samples.txt",row.names="gene_name")
+y <- DGEList(counts=x)
+group <- c("T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N",	"T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N","T","N")
+y <- DGEList(counts=x, group=group)
+y$samples
+keep <- filterByExpr(y)
+y <- y[keep, , keep.lib.sizes=FALSE]
+y <- calcNormFactors(y)
+y$samples
+design <- model.matrix(~group)
+y <- estimateDisp(y,design)
+y <- estimateCommonDisp(y,design)
+y <- estimateTagwiseDisp(y)
+et <- exactTest(y)
+topTags(et)
+write.csv(topTags(et,n=25000), file = "my_data.csv")  
+save.image("~/Siddhartha/R/EdgeR.RData")
